@@ -7,8 +7,10 @@ use Illuminate\Http\Request;
     return $request->user();
 });
 
-Route::apiResources([
-    'categories' => Api\CategoryController::class,
-    'genres'     => Api\GenreController::class,
-]);
+\Route::group(['as' => 'api.'], function () {
+    Route::apiResources([
+        'categories' => Api\CategoryController::class,
+        'genres'     => Api\GenreController::class,
+    ]);
+});
 
