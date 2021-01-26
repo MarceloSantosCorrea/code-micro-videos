@@ -7,7 +7,6 @@ use App\Models\Genre;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Validation\ValidationException;
 
 class GenreController extends Controller
 {
@@ -16,19 +15,19 @@ class GenreController extends Controller
         'is_active' => 'boolean',
     ];
 
-    public function index(): LengthAwarePaginator
+    public function index()
     {
-        return (new \App\Models\Genre)->paginate();
+        return Genre::all();
     }
 
     public function store(Request $request)
     {
-        try {
-            $this->validate($request, $this->rules);
-        } catch (ValidationException $e) {
-        }
+        $this->validate($request, $this->rules);
 
-        return Genre::create($request->all());
+        $model = Genre::create($request->all());
+        $model->refresh();
+
+        return $model;
     }
 
     public function show(Genre $genre): Genre
@@ -38,10 +37,7 @@ class GenreController extends Controller
 
     public function update(Request $request, Genre $genre): Genre
     {
-        try {
-            $this->validate($request, $this->rules);
-        } catch (ValidationException $e) {
-        }
+        $this->validate($request, $this->rules);
 
         $genre->update($request->all());
 
@@ -50,10 +46,7 @@ class GenreController extends Controller
 
     public function destroy(Genre $genre): Response
     {
-        try {
-            $genre->delete();
-        } catch (\Exception $e) {
-        }
+        $genre->delete();
 
         return response()->noContent();
     }

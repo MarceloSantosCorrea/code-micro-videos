@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Eloquent;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -30,16 +31,16 @@ use MarceloCorrea\Uuid\Uuid;
  * @method static \Illuminate\Database\Eloquent\Builder|Category whereUpdatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|Category withTrashed()
  * @method static \Illuminate\Database\Query\Builder|Category withoutTrashed()
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class Category extends Model
 {
     use HasFactory, Uuid, SoftDeletes;
 
-    public $incrementing = false;
+    public bool $incrementing = false;
 
-    protected $keyType = 'string';
-    protected $fillable = ['name', 'description', 'is_active'];
-    protected $dates = ['deleted_at'];
-    protected $casts = ['is_active' => 'boolean'];
+    protected string $keyType = 'string';
+    protected array $fillable = ['name', 'description', 'is_active'];
+    protected array $dates = ['deleted_at'];
+    protected array $casts = ['is_active' => 'boolean'];
 }

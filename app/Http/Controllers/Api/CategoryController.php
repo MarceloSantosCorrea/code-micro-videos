@@ -4,10 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Validation\ValidationException;
 
 class CategoryController extends Controller
 {
@@ -16,19 +14,19 @@ class CategoryController extends Controller
         'is_active' => 'boolean',
     ];
 
-    public function index(): LengthAwarePaginator
+    public function index()
     {
-        return (new \App\Models\Category)->paginate();
+        return Category::all();
     }
 
     public function store(Request $request)
     {
-        try {
-            $this->validate($request, $this->rules);
-        } catch (ValidationException $e) {
-        }
+        $this->validate($request, $this->rules);
 
-        return Category::create($request->all());
+        $model = Category::create($request->all());
+        $model->refresh();
+
+        return $model;
     }
 
     public function show(Category $category): Category
@@ -38,10 +36,7 @@ class CategoryController extends Controller
 
     public function update(Request $request, Category $category): Category
     {
-        try {
-            $this->validate($request, $this->rules);
-        } catch (ValidationException $e) {
-        }
+        $this->validate($request, $this->rules);
 
         $category->update($request->all());
 
@@ -50,10 +45,7 @@ class CategoryController extends Controller
 
     public function destroy(Category $category): Response
     {
-        try {
-            $category->delete();
-        } catch (\Exception $e) {
-        }
+        $category->delete();
 
         return response()->noContent();
     }
