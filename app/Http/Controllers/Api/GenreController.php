@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use App\Models\Genre;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class GenreController extends Controller
+class GenreController extends AbstractController
 {
+    protected function model(): string
+    {
+        return Genre::class;
+    }
+
     private $rules = [
         'name'      => 'required|max:255',
         'is_active' => 'boolean',

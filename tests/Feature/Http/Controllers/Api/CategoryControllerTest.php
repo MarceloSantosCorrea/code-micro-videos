@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers;
+namespace Tests\Feature\Http\Controllers\Api;
 
 use App\Models\Category;
 use Exception;
@@ -120,8 +120,14 @@ class CategoryControllerTest extends TestCase
     {
         $response = $this->json('delete', route('api.categories.destroy', ['category' => $this->instanceModel->id]));
         $response->assertStatus(204);
+
         $this->assertNull($this->model->find($this->instanceModel->id));
         $this->assertNotNull($this->model::withTrashed()->find($this->instanceModel->id));
+    }
+
+    protected function model(): string
+    {
+        return $this->modelName;
     }
 
     protected function routeStore(): string
@@ -132,10 +138,5 @@ class CategoryControllerTest extends TestCase
     protected function routeUpdate(): string
     {
         return route('api.categories.update', ['category' => $this->instanceModel->id]);
-    }
-
-    protected function model(): string
-    {
-        return $this->modelName;
     }
 }

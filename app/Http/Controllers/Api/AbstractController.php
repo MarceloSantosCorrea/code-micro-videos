@@ -2,30 +2,36 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class CategoryController extends AbstractController
+abstract class AbstractController extends Controller
 {
-    protected function model(): string
-    {
-        return Category::class;
-    }
+    protected abstract function model();
 
-    private $rules = [
-        'name'      => 'required|max:255',
-        'is_active' => 'boolean',
-    ];
+    protected abstract function rulesStore();
+
+    public function index()
+    {
+        return $this->model()::all();
+    }
 
     public function store(Request $request)
     {
-        $this->validate($request, $this->rules);
-
-        $model = Category::create($request->all());
+        $validatedData = $this->validate($request, $this->rulesStore());
+        $model = $this->model()::create($validatedData);
         $model->refresh();
 
         return $model;
+    }
+
+    protected function findOrFail($id)
+    {
+        $model = $this->model();
+        $keyName = (new $model)->getRouteKeyName();
+        return $this->model()::where($keyName, $id)->firstOrFail();
     }
 
     public function show(Category $category): Category
