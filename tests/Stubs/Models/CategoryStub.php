@@ -7,8 +7,8 @@ use Illuminate\Database\Schema\Blueprint;
 
 class CategoryStub extends Model
 {
-    protected string $table = 'category_stubs';
-    protected array $fillable = ['name', 'description'];
+    protected $table = 'category_stubs';
+    protected $fillable = ['name', 'description'];
 
     public static function createTable()
     {
