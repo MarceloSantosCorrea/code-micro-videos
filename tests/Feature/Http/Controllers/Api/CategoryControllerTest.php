@@ -14,16 +14,12 @@ class CategoryControllerTest extends TestCase
 {
     use DatabaseMigrations, WithFaker, TraitValidations, TraitSaves;
 
-    private string $modelName = Category::class;
-    private Category $model;
-    private Category $instanceModel;
+    private Category $category;
 
     protected function setUp(): void
     {
         parent::setUp();
-
-        $this->model = new $this->modelName;
-        $this->instanceModel = $this->model::factory()->create();
+        $this->category = Category::factory()->create();
     }
 
     public function test_index(): void
@@ -32,16 +28,16 @@ class CategoryControllerTest extends TestCase
 
         $response
             ->assertStatus(200)
-            ->assertJson([$this->instanceModel->toArray()]);
+            ->assertJson([$this->category->toArray()]);
     }
 
     public function test_show(): void
     {
-        $response = $this->get(route('api.categories.show', ['category' => $this->instanceModel->id]));
+        $response = $this->get(route('api.categories.show', ['category' => $this->category->id]));
 
         $response
             ->assertStatus(200)
-            ->assertJson($this->instanceModel->toArray());
+            ->assertJson($this->category->toArray());
     }
 
     public function test_invalidation_data(): void
@@ -81,7 +77,7 @@ class CategoryControllerTest extends TestCase
      */
     public function test_update(): void
     {
-        $this->instanceModel = $this->model::factory()->create([
+        $this->category = Category::factory()->create([
             'description' => $this->faker->sentence,
             'is_active'   => false,
         ]);
@@ -118,16 +114,16 @@ class CategoryControllerTest extends TestCase
 
     public function test_destroy(): void
     {
-        $response = $this->json('delete', route('api.categories.destroy', ['category' => $this->instanceModel->id]));
+        $response = $this->json('delete', route('api.categories.destroy', ['category' => $this->category->id]));
         $response->assertStatus(204);
 
-        $this->assertNull($this->model->find($this->instanceModel->id));
-        $this->assertNotNull($this->model::withTrashed()->find($this->instanceModel->id));
+        $this->assertNull(Category::find($this->category->id));
+        $this->assertNotNull(Category::withTrashed()->find($this->category->id));
     }
 
     protected function model(): string
     {
-        return $this->modelName;
+        return Category::class;
     }
 
     protected function routeStore(): string
@@ -137,6 +133,6 @@ class CategoryControllerTest extends TestCase
 
     protected function routeUpdate(): string
     {
-        return route('api.categories.update', ['category' => $this->instanceModel->id]);
+        return route('api.categories.update', ['category' => $this->category->id]);
     }
 }

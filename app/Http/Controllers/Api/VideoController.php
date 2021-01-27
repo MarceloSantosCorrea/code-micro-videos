@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Video;
+use Illuminate\Http\Request;
 
 class VideoController extends AbstractController
 {
@@ -17,6 +18,8 @@ class VideoController extends AbstractController
             'opened'        => 'boolean',
             'rating'        => 'required|in:' . implode(',', Video::RATING_LIST),
             'duration'      => 'required|integer',
+            'categories_id' => 'required|array|exists:categories,id',
+            'genres_id'     => 'required|array|exists:genres,id',
         ];
     }
 
@@ -33,5 +36,46 @@ class VideoController extends AbstractController
     protected function rulesUpdate(): array
     {
         return $this->rules;
+    }
+
+    public function store(Request $request)
+    {
+        $validatedData = $this->validate($request, $this->rulesStore());
+
+        $self = $this;
+        $model = \DB::transaction(function () use ($request, $self, $validatedData) {
+
+            $model = $this->model()::create($validatedData);
+            $self->handleRelations($request, $model);
+
+            return $model;
+        });
+        $model->refresh();
+
+        return $model;
+    }
+
+    public function update(Request $request, $id)
+    {
+        $model = $this->findOrFail($id);
+
+        $validatedData = $this->validate($request, $this->rulesUpdate());
+
+        $self = $this;
+        $model = \DB::transaction(function () use ($request, $self, $model, $validatedData) {
+
+            $model->update($validatedData);
+            $self->handleRelations($request, $model);
+
+            return $model;
+        });
+
+        return $model;
+    }
+
+    protected function handleRelations(Request $request, Video $video)
+    {
+        $video->categories()->sync($request->get('categories_id'));
+        $video->genres()->sync($request->get('genres_id'));
     }
 }
