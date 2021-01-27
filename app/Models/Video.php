@@ -12,7 +12,7 @@ class Video extends Model
     use HasFactory, Uuid, SoftDeletes;
 
     public bool $incrementing = false;
-    protected string $keyType = 'string';
+    protected $keyType = 'string';
 
     const RATING_LIST = ['L', '10', '12', '14', '16', '18'];
 

@@ -39,7 +39,7 @@ class Genre extends Model
 
     public bool $incrementing = false;
 
-    protected string $keyType = 'string';
+    protected $keyType = 'string';
     protected array $fillable = ['name', 'is_active'];
     protected array $dates = ['deleted_at'];
     protected array $casts = ['is_active' => 'boolean'];

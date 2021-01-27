@@ -12,7 +12,7 @@ class CastMember extends Model
     use HasFactory, Uuid, SoftDeletes;
 
     public bool $incrementing = false;
-    protected string $keyType = 'string';
+    protected $keyType = 'string';
 
     const TYPE_DIRECTOR = 1;
     const TYPE_ACTOR = 2;
