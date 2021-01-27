@@ -11,18 +11,18 @@ class Video extends Model
 {
     use HasFactory, Uuid, SoftDeletes;
 
-    public bool $incrementing = false;
+    public $incrementing = false;
     protected $keyType = 'string';
 
     const RATING_LIST = ['L', '10', '12', '14', '16', '18'];
 
-    protected array $fillable = [
+    protected $fillable = [
         'title', 'description', 'year_launched', 'opened', 'rating', 'duration',
     ];
 
-    protected array $dates = ['deleted_at'];
+    protected $dates = ['deleted_at'];
 
-    protected array $casts = [
+    protected $casts = [
         'opened'        => 'boolean',
         'year_launched' => 'integer',
         'duration'      => 'integer',

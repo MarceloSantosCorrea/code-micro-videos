@@ -37,10 +37,10 @@ class Genre extends Model
 {
     use HasFactory, Uuid, SoftDeletes;
 
-    public bool $incrementing = false;
+    public $incrementing = false;
 
     protected $keyType = 'string';
-    protected array $fillable = ['name', 'is_active'];
-    protected array $dates = ['deleted_at'];
-    protected array $casts = ['is_active' => 'boolean'];
+    protected $fillable = ['name', 'is_active'];
+    protected $dates = ['deleted_at'];
+    protected $casts = ['is_active' => 'boolean'];
 }

@@ -11,14 +11,14 @@ class CastMember extends Model
 {
     use HasFactory, Uuid, SoftDeletes;
 
-    public bool $incrementing = false;
+    public $incrementing = false;
     protected $keyType = 'string';
 
     const TYPE_DIRECTOR = 1;
     const TYPE_ACTOR = 2;
 
-    protected array $fillable = ['name', 'type'];
-    protected array $dates = ['deleted_at'];
-    protected array $casts = ['type' => 'integer'];
+    protected $fillable = ['name', 'type'];
+    protected $dates = ['deleted_at'];
+    protected $casts = ['type' => 'integer'];
 
 }
