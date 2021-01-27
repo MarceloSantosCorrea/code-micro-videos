@@ -9,8 +9,10 @@ use Illuminate\Http\Request;
 
 \Route::group(['as' => 'api.'], function () {
     Route::apiResources([
-        'categories' => Api\CategoryController::class,
-        'genres'     => Api\GenreController::class,
+        'categories'   => Api\CategoryController::class,
+        'genres'       => Api\GenreController::class,
+        'cast_members' => Api\CastMemberController::class,
+        'videos'       => Api\VideoController::class,
     ]);
 });
 

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -12,6 +11,8 @@ abstract class AbstractController extends Controller
     protected abstract function model();
 
     protected abstract function rulesStore();
+
+    protected abstract function rulesUpdate();
 
     public function index()
     {
@@ -34,23 +35,25 @@ abstract class AbstractController extends Controller
         return $this->model()::where($keyName, $id)->firstOrFail();
     }
 
-    public function show(Category $category): Category
+    public function show($id)
     {
-        return $category;
+        return $this->findOrFail($id);
     }
 
-    public function update(Request $request, Category $category): Category
+    public function update(Request $request, $id)
     {
-        $this->validate($request, $this->rules);
+        $model = $this->findOrFail($id);
 
-        $category->update($request->all());
+        $validatedData = $this->validate($request, $this->rulesUpdate());
+        $model->update($validatedData);
 
-        return $category;
+        return $model;
     }
 
-    public function destroy(Category $category): Response
+    public function destroy($id): Response
     {
-        $category->delete();
+        $model = $this->findOrFail($id);
+        $model->delete();
 
         return response()->noContent();
     }

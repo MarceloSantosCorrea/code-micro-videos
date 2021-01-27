@@ -14,7 +14,7 @@ class AbstractControllerTest extends TestCase
 {
     use WithFaker;
 
-    private $controller;
+    private CategoryControllerStub $controller;
 
     protected function setUp(): void
     {
@@ -99,5 +99,51 @@ class AbstractControllerTest extends TestCase
         $reflectionMethod->setAccessible(true);
 
         $reflectionMethod->invokeArgs($this->controller, [0]);
+    }
+
+    public function test_show()
+    {
+        $category = CategoryStub::create([
+            'name'        => $this->faker->colorName,
+            'description' => $this->faker->sentence,
+        ]);
+
+        $result = $this->controller->show($category->id);
+        $this->assertEquals($result->toArray(), CategoryStub::find(1)->toArray());
+    }
+
+    public function test_update()
+    {
+        $category = CategoryStub::create([
+            'name'        => $this->faker->colorName,
+            'description' => $this->faker->sentence,
+        ]);
+
+        $request = \Mockery::mock(Request::class);
+        $request
+            ->shouldReceive('all')
+            ->once()
+            ->andReturn([
+                'name'        => $this->faker->colorName,
+                'description' => $this->faker->sentence,
+            ]);
+
+        $result = $this->controller->update($request, $category->id);
+        $this->assertEquals($result->toArray(), CategoryStub::find(1)->toArray());
+    }
+
+    public function test_destroy()
+    {
+        $category = CategoryStub::create([
+            'name'        => $this->faker->colorName,
+            'description' => $this->faker->sentence,
+        ]);
+
+        $result = $this->controller->destroy($category->id);
+        $this
+            ->createTestResponse($result)
+            ->assertStatus(204);
+
+        $this->assertCount(0, CategoryStub::all());
     }
 }
