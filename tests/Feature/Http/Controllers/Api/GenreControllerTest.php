@@ -124,14 +124,6 @@ class GenreControllerTest extends TestCase
         $this->assertHasCategory($response->json('id'), $category_id);
     }
 
-    protected function assertHasCategory(string $genreId, string $categoryId)
-    {
-        $this->assertDatabaseHas('category_genre', [
-            'genre_id'    => $genreId,
-            'category_id' => $categoryId,
-        ]);
-    }
-
     public function test_sync_categories()
     {
         $categoriesId = Category::factory(3)->create()->pluck('id')->toArray();
@@ -233,6 +225,14 @@ class GenreControllerTest extends TestCase
 
         $this->assertNull(Genre::find($this->genre->id));
         $this->assertNotNull(Genre::withTrashed()->find($this->genre->id));
+    }
+
+    protected function assertHasCategory(string $genreId, string $categoryId)
+    {
+        $this->assertDatabaseHas('category_genre', [
+            'genre_id'    => $genreId,
+            'category_id' => $categoryId,
+        ]);
     }
 
     protected function model(): string

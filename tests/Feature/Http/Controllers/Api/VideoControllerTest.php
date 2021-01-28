@@ -167,7 +167,7 @@ class VideoControllerTest extends TestCase
     /**
      * @throws Exception
      */
-    public function testSave()
+    public function test_save()
     {
         $category = Category::factory()->create();
         $genre = Genre::factory()->create();
@@ -202,22 +202,6 @@ class VideoControllerTest extends TestCase
             $this->assertHasCategory($response->json('id'), $value['send_data']['categories_id'][0]);
             $this->assertHasGenre($response->json('id'), $value['send_data']['genres_id'][0]);
         }
-    }
-
-    protected function assertHasCategory(string $videoId, string $categoryId)
-    {
-        $this->assertDatabaseHas('category_video', [
-            'video_id'    => $videoId,
-            'category_id' => $categoryId,
-        ]);
-    }
-
-    protected function assertHasGenre(string $videoId, string $genreId)
-    {
-        $this->assertDatabaseHas('genre_video', [
-            'video_id' => $videoId,
-            'genre_id' => $genreId,
-        ]);
     }
 
     public function test_async_categories()
@@ -306,6 +290,9 @@ class VideoControllerTest extends TestCase
             ->andReturn([]);
 
         $request = \Mockery::mock(Request::class);
+        $request->shouldReceive('get')
+            ->withAnyArgs()
+            ->andReturnNull();
 
         $controller->shouldReceive('handleRelations')
             ->once()
@@ -340,6 +327,9 @@ class VideoControllerTest extends TestCase
             ->andReturn([]);
 
         $request = \Mockery::mock(Request::class);
+        $request->shouldReceive('get')
+            ->withAnyArgs()
+            ->andReturnNull();
 
         $controller->shouldReceive('handleRelations')
             ->once()
@@ -372,6 +362,22 @@ class VideoControllerTest extends TestCase
 
         $this->assertNull(Video::find($this->video->id));
         $this->assertNotNull(Video::withTrashed()->find($this->video->id));
+    }
+
+    protected function assertHasCategory(string $videoId, string $categoryId)
+    {
+        $this->assertDatabaseHas('category_video', [
+            'video_id'    => $videoId,
+            'category_id' => $categoryId,
+        ]);
+    }
+
+    protected function assertHasGenre(string $videoId, string $genreId)
+    {
+        $this->assertDatabaseHas('genre_video', [
+            'video_id' => $videoId,
+            'genre_id' => $genreId,
+        ]);
     }
 
     protected function model(): string
