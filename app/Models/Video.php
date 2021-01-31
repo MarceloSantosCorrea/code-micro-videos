@@ -2,22 +2,26 @@
 
 namespace App\Models;
 
+use App\Models\Traits\UploadFiles;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Http\UploadedFile;
 use MarceloCorrea\Uuid\Uuid;
 use Throwable;
 
 class Video extends Model
 {
-    use HasFactory, Uuid, SoftDeletes;
+    use HasFactory, Uuid, SoftDeletes, UploadFiles;
 
     public $incrementing = false;
     protected $keyType = 'string';
 
     const RATING_LIST = ['L', '10', '12', '14', '16', '18'];
+
+    public static $fieldFields = ['filme', 'banner', 'trailer'];
 
     protected $fillable = [
         'title', 'description', 'year_launched', 'opened', 'rating', 'duration',
@@ -39,12 +43,15 @@ class Video extends Model
      */
     public static function create(array $attributes = [])
     {
+        $files = self::extractFiles($attributes);
         try {
             \DB::beginTransaction();
+
+            /** @var Video $obj */
             $obj = static::query()->create($attributes);
             self::handleRelations($obj, $attributes);
 
-            // upload aqui
+            $obj->uploadFiles($files);
             // excluir arquivos antigos
 
             \DB::commit();
@@ -107,5 +114,10 @@ class Video extends Model
     public function genres(): BelongsToMany
     {
         return $this->belongsToMany(Genre::class)->withTrashed();
+    }
+
+    protected function uploadDir(): string
+    {
+        return $this->id;
     }
 }
