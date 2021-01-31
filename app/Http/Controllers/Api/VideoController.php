@@ -47,15 +47,7 @@ class VideoController extends AbstractController
     {
         $this->addRuleIfGenreHasCategories($request);
         $validatedData = $this->validate($request, $this->rulesStore());
-
-        $self = $this;
-        $model = \DB::transaction(function () use ($request, $self, $validatedData) {
-
-            $model = $this->model()::create($validatedData);
-            $self->handleRelations($request, $model);
-
-            return $model;
-        });
+        $model = $this->model()::create($validatedData);
         $model->refresh();
 
         return $model;
@@ -64,18 +56,9 @@ class VideoController extends AbstractController
     public function update(Request $request, $id)
     {
         $model = $this->findOrFail($id);
-
         $this->addRuleIfGenreHasCategories($request);
         $validatedData = $this->validate($request, $this->rulesUpdate());
-
-        $self = $this;
-        $model = \DB::transaction(function () use ($request, $self, $model, $validatedData) {
-
-            $model->update($validatedData);
-            $self->handleRelations($request, $model);
-
-            return $model;
-        });
+        $model->update($validatedData);
 
         return $model;
     }
@@ -85,11 +68,5 @@ class VideoController extends AbstractController
         $categoriesId = $request->get('categories_id');
         $categoriesId = is_array($categoriesId) ? $categoriesId : [];
         $this->rules['genres_id'][] = new GenresHasCategoriesRule($categoriesId);
-    }
-
-    protected function handleRelations(Request $request, Video $video)
-    {
-        $video->categories()->sync($request->get('categories_id'));
-        $video->genres()->sync($request->get('genres_id'));
     }
 }
