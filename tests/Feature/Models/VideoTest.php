@@ -36,7 +36,7 @@ class VideoTest extends TestCase
         $videoKeys = array_keys($videos->first()->getAttributes());
         $this->assertEqualsCanonicalizing([
             'id', 'title', 'description', 'year_launched', 'duration', 'opened', 'rating', 'created_at', 'updated_at',
-            'deleted_at',
+            'video_file', 'deleted_at',
         ], $videoKeys);
     }
 
@@ -260,7 +260,7 @@ class VideoTest extends TestCase
 
         $this->assertDatabaseHas('genre_video', [
             'genre_id' => $genresId[2],
-            'video_id'    => $video->id,
+            'video_id' => $video->id,
         ]);
     }
 }
