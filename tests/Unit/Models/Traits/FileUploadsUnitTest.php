@@ -55,7 +55,7 @@ class FileUploadsUnitTest extends TestCase
         $file1 = UploadedFile::fake()->create('video1.mp4');
         $file2 = UploadedFile::fake()->create('video2.mp4');
         $this->obj->deleteFiles([$file1->hashName(), $file2]);
-        \Storage::assertExists("1/{$file1->hashName()}");
-        \Storage::assertExists("1/{$file2->hashName()}");
+        \Storage::assertMissing("1/{$file1->hashName()}");
+        \Storage::assertMissing("1/{$file2->hashName()}");
     }
 }
