@@ -25,7 +25,7 @@ class VideoController extends AbstractController
                 'array',
                 'exists:genres,id,deleted_at,NULL',
             ],
-            'video_file'    => 'nullable',
+            'video_file'    => 'mimetypes:video/mp4|max:12',
         ];
     }
 

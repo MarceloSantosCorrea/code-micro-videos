@@ -12,12 +12,13 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\Request;
 use Tests\Exceptions\TestException;
 use Tests\TestCase;
+use Tests\Traits\TestUploads;
 use Tests\Traits\TraitSaves;
 use Tests\Traits\TraitValidations;
 
 class VideoControllerTest extends TestCase
 {
-    use DatabaseMigrations, WithFaker, TraitValidations, TraitSaves;
+    use DatabaseMigrations, WithFaker, TraitValidations, TraitSaves, TestUploads;
 
     private Video $video;
     private array $sendData;
@@ -162,6 +163,49 @@ class VideoControllerTest extends TestCase
         ];
         $this->assertInvalidationInStoreAction($data, 'exists');
         $this->assertInvalidationInUpdateAction($data, 'exists');
+    }
+
+    public function test_invalidation_video_field()
+    {
+        $this->assertInvalidationFile(
+            'video_file',
+            'mp4',
+            12,
+            'mimetypes', ['values' => 'video/mp4']
+        );
+    }
+
+    public function test_save_without_files()
+    {
+        $category = Category::factory()->create();
+        $genre = Genre::factory()->create();
+        $genre->categories()->sync($category->id);
+
+        $data = [
+            [
+                'send_data' => $this->sendData + [
+                        'categories_id' => [$category->id],
+                        'genres_id'     => [$genre->id],
+                    ],
+                'test_data' => $this->sendData + ['opened' => false],
+            ],
+            [
+                'send_data' => $this->sendData + [
+                        'opened'        => true,
+                        'categories_id' => [$category->id],
+                        'genres_id'     => [$genre->id],
+                    ],
+                'test_data' => $this->sendData + ['opened' => true],
+            ],
+            [
+                'send_data' => $this->sendData + [
+                        'rating'        => Video::RATING_LIST[1],
+                        'categories_id' => [$category->id],
+                        'genres_id'     => [$genre->id],
+                    ],
+                'test_data' => $this->sendData + ['opened' => false],
+            ],
+        ];
     }
 
     /**
