@@ -37,6 +37,7 @@ class VideoCrudTest extends BaseVideoTestCase
             'created_at',
             'updated_at',
             'video_file',
+            'thumb_file',
             'deleted_at',
         ], $videoKeys);
     }

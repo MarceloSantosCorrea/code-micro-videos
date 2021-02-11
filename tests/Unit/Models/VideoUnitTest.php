@@ -22,7 +22,7 @@ class VideoUnitTest extends TestCase
     public function test_fillable_attributes()
     {
         $fillable = [
-            'title', 'description', 'year_launched', 'opened', 'rating', 'duration',
+            'title', 'description', 'year_launched', 'opened', 'rating', 'duration', 'video_file', 'thumb_file',
         ];
         $this->assertEqualsCanonicalizing($fillable, $this->model->getFillable());
     }
