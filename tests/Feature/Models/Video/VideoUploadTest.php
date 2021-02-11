@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Models\Video;
 
-class VideoUpload extends BaseVideoTestCase
+class VideoUploadTest extends BaseVideoTestCase
 {
 
 }
