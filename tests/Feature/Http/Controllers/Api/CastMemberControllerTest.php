@@ -7,12 +7,12 @@ use Exception;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
-use Tests\Traits\TraitSaves;
-use Tests\Traits\TraitValidations;
+use Tests\Traits\TestSaves;
+use Tests\Traits\TestValidations;
 
 class CastMemberControllerTest extends TestCase
 {
-    use DatabaseMigrations, WithFaker, TraitValidations, TraitSaves;
+    use DatabaseMigrations, WithFaker, TestValidations, TestSaves;
 
     private string $modelName = CastMember::class;
     private CastMember $model;

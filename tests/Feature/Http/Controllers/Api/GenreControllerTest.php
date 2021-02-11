@@ -13,12 +13,12 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\Request;
 use Tests\Exceptions\TestException;
 use Tests\TestCase;
-use Tests\Traits\TraitSaves;
-use Tests\Traits\TraitValidations;
+use Tests\Traits\TestSaves;
+use Tests\Traits\TestValidations;
 
 class GenreControllerTest extends TestCase
 {
-    use DatabaseMigrations, WithFaker, TraitValidations, TraitSaves;
+    use DatabaseMigrations, WithFaker, TestValidations, TestSaves;
 
     private Genre $genre;
 

@@ -1,32 +1,14 @@
 <?php
 
-namespace Tests\Feature\Models;
+namespace Tests\Feature\Models\Video;
 
 use App\Models\Category;
 use App\Models\Genre;
 use App\Models\Video;
 use Illuminate\Database\QueryException;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Tests\TestCase;
 
-class VideoTest extends TestCase
+class VideoCrudTest extends BaseVideoTestCase
 {
-    use DatabaseMigrations;
-
-    protected $data;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->data = [
-            'title'         => 'title',
-            'description'   => 'description',
-            'year_launched' => 2010,
-            'rating'        => Video::RATING_LIST[0],
-            'duration'      => 90,
-        ];
-    }
-
     public function test_list()
     {
         Video::factory()->create();
@@ -35,8 +17,17 @@ class VideoTest extends TestCase
 
         $videoKeys = array_keys($videos->first()->getAttributes());
         $this->assertEqualsCanonicalizing([
-            'id', 'title', 'description', 'year_launched', 'duration', 'opened', 'rating', 'created_at', 'updated_at',
-            'video_file', 'deleted_at',
+            'id',
+            'title',
+            'description',
+            'year_launched',
+            'duration',
+            'opened',
+            'rating',
+            'created_at',
+            'updated_at',
+            'video_file',
+            'deleted_at',
         ], $videoKeys);
     }
 

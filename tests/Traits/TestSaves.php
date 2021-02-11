@@ -5,7 +5,7 @@ namespace Tests\Traits;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Testing\TestResponse;
 
-trait TraitSaves
+trait TestSaves
 {
     use WithFaker;
 

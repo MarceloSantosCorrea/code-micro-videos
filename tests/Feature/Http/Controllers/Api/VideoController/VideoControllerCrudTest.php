@@ -1,44 +1,16 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers\Api;
+namespace Tests\Feature\Http\Controllers\Api\VideoController;
 
-use App\Http\Controllers\Api\VideoController;
 use App\Models\Category;
 use App\Models\Genre;
 use App\Models\Video;
-use Exception;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Http\Request;
-use Tests\Exceptions\TestException;
-use Tests\TestCase;
-use Tests\Traits\TestUploads;
-use Tests\Traits\TraitSaves;
-use Tests\Traits\TraitValidations;
+use Tests\Traits\TestSaves;
+use Tests\Traits\TestValidations;
 
-class VideoControllerTest extends TestCase
+class VideoControllerCrudTest extends BaseVideoControllerTestCase
 {
-    use DatabaseMigrations, WithFaker, TraitValidations, TraitSaves, TestUploads;
-
-    private Video $video;
-    private array $sendData;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->video = Video::factory()->create([
-            'opened' => false,
-        ]);
-
-        $this->sendData = [
-            'title'         => 'title',
-            'description'   => 'description',
-            'year_launched' => 2010,
-            'rating'        => Video::RATING_LIST[0],
-            'duration'      => 90,
-        ];
-    }
+    use TestValidations, TestSaves;
 
     public function test_index(): void
     {
@@ -165,16 +137,6 @@ class VideoControllerTest extends TestCase
         $this->assertInvalidationInUpdateAction($data, 'exists');
     }
 
-    public function test_invalidation_video_field()
-    {
-        $this->assertInvalidationFile(
-            'video_file',
-            'mp4',
-            12,
-            'mimetypes', ['values' => 'video/mp4']
-        );
-    }
-
     public function test_save_without_files()
     {
         $category = Category::factory()->create();
@@ -203,33 +165,6 @@ class VideoControllerTest extends TestCase
                         'categories_id' => [$category->id],
                         'genres_id'     => [$genre->id],
                     ],
-                'test_data' => $this->sendData + ['opened' => false],
-            ],
-        ];
-    }
-
-    /**
-     * @throws Exception
-     */
-    public function test_save()
-    {
-        $category = Category::factory()->create();
-        $genre = Genre::factory()->create();
-        $genre->categories()->sync($category->id);
-
-        $sendData = $this->sendData + ['categories_id' => [$category->id], 'genres_id' => [$genre->id]];
-
-        $data = [
-            [
-                'send_data' => $sendData,
-                'test_data' => $this->sendData + ['opened' => false],
-            ],
-            [
-                'send_data' => $sendData + ['opened' => true],
-                'test_data' => $this->sendData + ['opened' => true],
-            ],
-            [
-                'send_data' => $sendData + ['rating' => Video::RATING_LIST[1]],
                 'test_data' => $this->sendData + ['rating' => Video::RATING_LIST[1]],
             ],
         ];
