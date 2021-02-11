@@ -20,10 +20,10 @@ class Video extends Model
 
     const RATING_LIST = ['L', '10', '12', '14', '16', '18'];
 
-    public static $fieldFields = ['video_file'];
+    public static $fieldFields = ['video_file', 'thumb_file'];
 
     protected $fillable = [
-        'title', 'description', 'year_launched', 'opened', 'rating', 'duration',
+        'title', 'description', 'year_launched', 'opened', 'rating', 'duration', 'video_file', 'thumb_file',
     ];
 
     protected $dates = ['deleted_at'];
@@ -45,21 +45,15 @@ class Video extends Model
         $files = self::extractFiles($attributes);
         try {
             \DB::beginTransaction();
-
             /** @var Video $obj */
             $obj = static::query()->create($attributes);
             self::handleRelations($obj, $attributes);
-
             $obj->uploadFiles($files);
-            // excluir arquivos antigos
-
             \DB::commit();
-
             return $obj;
         } catch (\Exception $e) {
-
             if (isset($obj)) {
-                // excluir arquivos de uploads
+                $obj->deleteFiles($files);
             }
             \DB::rollBack();
             throw $e;
