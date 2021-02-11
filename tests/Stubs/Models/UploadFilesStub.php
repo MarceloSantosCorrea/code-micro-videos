@@ -10,8 +10,8 @@ class UploadFilesStub extends Model
 {
     use UploadFiles;
 
-//    public static $fieldFields = ['filme', 'banner', 'trailer'];
-    public static $fieldFields = ['file1', 'file2'];
+//    public static $fileFields = ['filme', 'banner', 'trailer'];
+    public static $fileFields = ['file1', 'file2'];
 
 //    protected $table = 'upload_file_stubs';
 //    protected $fillable = ['name', 'file1', 'file2'];
