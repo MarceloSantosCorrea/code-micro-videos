@@ -6,10 +6,11 @@ RUN apk add --no-cache openssl \
             nodejs \
             npm \
             freetype-dev \
+            libjpeg-turbo \
             libjpeg-turbo-dev \
             libpng-dev
 RUN docker-php-ext-install pdo pdo_mysql
-RUN docker-php-ext-configure gd
+RUN docker-php-ext-configure gd --enable-gd --with-jpeg
 RUN docker-php-ext-install -j$(nproc) gd
 
 ENV DOCKERIZE_VERSION v0.6.1
