@@ -20,7 +20,7 @@ class Video extends Model
 
     const RATING_LIST = ['L', '10', '12', '14', '16', '18'];
 
-    public static $fileFields = ['video_file', 'thumb_file'];
+    public static array $fileFields = ['video_file', 'thumb_file'];
 
     protected $fillable = [
         'title', 'description', 'year_launched', 'opened', 'rating', 'duration', 'video_file', 'thumb_file',

@@ -66,7 +66,7 @@ trait UploadFiles
     public static function extractFiles(array &$attributes = []): array
     {
         $files = [];
-        foreach (self::$fieldFields as $file) {
+        foreach (self::$fileFields as $file) {
             if (isset($attributes[$file]) && $attributes[$file] instanceof UploadedFile) {
                 $files[] = $attributes[$file];
                 $attributes[$file] = $attributes[$file]->hashName();
