@@ -62,9 +62,9 @@ return [
             'project_id'      => env('GOOGLE_CLOUD_PROJECT_ID', 'your-project-id'),
             'key_file'        => storage_path('credentials/google/service-account.json'),
             'bucket'          => env('GOOGLE_CLOUD_STORAGE_BUCKET', 'your-bucket'),
-            'path_prefix'     => env('GOOGLE_CLOUD_STORAGE_PATH_PREFIX', null), // optional: /default/path/to/apply/in/bucket
-            'storage_api_uri' => env('GOOGLE_CLOUD_STORAGE_API_URI', null), // see: Public URLs below
-            'visibility'      => 'public', // optional: public|private
+            'path_prefix'     => env('GOOGLE_CLOUD_STORAGE_PATH_PREFIX', null),
+            'storage_api_uri' => env('GOOGLE_CLOUD_STORAGE_API_URI', null),
+            'visibility'      => 'public',
         ],
 
     ],
