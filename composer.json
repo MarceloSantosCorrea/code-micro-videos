@@ -14,7 +14,8 @@
     "guzzlehttp/guzzle": "^7.0.1",
     "laravel/framework": "^8.12",
     "laravel/tinker": "^2.5",
-    "marcelo-correa/uuid": "^1.1"
+    "marcelo-correa/uuid": "^1.1",
+    "superbalist/laravel-google-cloud-storage": "^2.2"
   },
   "require-dev": {
     "barryvdh/laravel-ide-helper": "^2.9",
