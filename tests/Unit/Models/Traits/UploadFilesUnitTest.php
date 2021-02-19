@@ -16,6 +16,14 @@ class UploadFilesUnitTest extends TestCase
         $this->obj = new UploadFilesStub();
     }
 
+    public function test_relative_file_path()
+    {
+        $this->assertEquals(
+            '1/video.mp4',
+            $this->obj->relativeFilePath('video.mp4')
+        );
+    }
+
     public function test_upload_file()
     {
         \Storage::fake();
