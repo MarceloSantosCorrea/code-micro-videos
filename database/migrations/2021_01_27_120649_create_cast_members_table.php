@@ -17,8 +17,8 @@ class CreateCastMembersTable extends Migration
             $table->uuid('id')->primary();
             $table->string('name');
             $table->smallInteger('type');
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

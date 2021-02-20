@@ -25,8 +25,8 @@ class CreateVideosTable extends Migration
             $table->string('banner_file')->nullable();
             $table->string('trailer_file')->nullable();
             $table->string('video_file')->nullable();
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
