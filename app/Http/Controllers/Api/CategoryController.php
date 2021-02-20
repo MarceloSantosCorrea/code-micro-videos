@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Resources\CategoryResource;
 use App\Models\Category;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class CategoryController extends AbstractController
 {
@@ -11,6 +13,20 @@ class CategoryController extends AbstractController
         'description' => 'nullable',
         'is_active'   => 'boolean',
     ];
+
+    public function index(): AnonymousResourceCollection
+    {
+        $collection = parent::index();
+
+        return CategoryResource::collection($collection);
+    }
+
+    public function show($id): CategoryResource
+    {
+        $obj = parent::show($id);
+
+        return new CategoryResource($obj);
+    }
 
     protected function model(): string
     {
