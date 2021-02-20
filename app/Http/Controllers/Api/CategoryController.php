@@ -21,13 +21,6 @@ class CategoryController extends AbstractController
         return CategoryResource::collection($collection);
     }
 
-    public function show($id): CategoryResource
-    {
-        $obj = parent::show($id);
-
-        return new CategoryResource($obj);
-    }
-
     protected function model(): string
     {
         return Category::class;
@@ -41,5 +34,10 @@ class CategoryController extends AbstractController
     protected function rulesUpdate(): array
     {
         return $this->rules;
+    }
+
+    protected function resource(): string
+    {
+        return CategoryResource::class;
     }
 }

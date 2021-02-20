@@ -8,11 +8,13 @@ use Illuminate\Http\Response;
 
 abstract class AbstractController extends Controller
 {
-    protected abstract function model();
+    protected abstract function model(): string;
 
-    protected abstract function rulesStore();
+    protected abstract function rulesStore(): array;
 
-    protected abstract function rulesUpdate();
+    protected abstract function rulesUpdate(): array;
+
+    protected abstract function resource(): string;
 
     public function index()
     {
@@ -24,8 +26,9 @@ abstract class AbstractController extends Controller
         $validatedData = $this->validate($request, $this->rulesStore());
         $model = $this->model()::create($validatedData);
         $model->refresh();
+        $resource = $this->resource();
 
-        return $model;
+        return new $resource($model);
     }
 
     protected function findOrFail($id)
@@ -37,7 +40,9 @@ abstract class AbstractController extends Controller
 
     public function show($id)
     {
-        return $this->findOrFail($id);
+        $model = $this->findOrFail($id);
+        $resource = $this->resource();
+        return new $resource($model);
     }
 
     public function update(Request $request, $id)
@@ -46,8 +51,9 @@ abstract class AbstractController extends Controller
 
         $validatedData = $this->validate($request, $this->rulesUpdate());
         $model->update($validatedData);
+        $resource = $this->resource();
 
-        return $model;
+        return new $resource($model);
     }
 
     public function destroy($id): Response
