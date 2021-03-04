@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\AbstractController;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Tests\Stubs\Controllers\CategoryControllerStub;
 use Tests\Stubs\Models\CategoryStub;
 use Tests\TestCase;
@@ -38,9 +39,12 @@ class AbstractControllerTest extends TestCase
             'description' => $this->faker->sentence,
         ]);
 
-        $result = $this->controller->index()->toArray();
+        $resource = $this->controller->index();
+        $serialized = $resource->response()->getData(true);
 
-        $this->assertEquals([$category->toArray()], $result);
+        $this->assertEquals([$category->toArray()], $serialized['data']);
+        $this->assertArrayHasKey('meta', $serialized);
+        $this->assertArrayHasKey('links', $serialized);
     }
 
     public function test_invalidation_data_in_store()
@@ -50,9 +54,7 @@ class AbstractControllerTest extends TestCase
         $request
             ->shouldReceive('all')
             ->once()
-            ->andReturn([
-                'name' => '',
-            ]);
+            ->andReturn(['name' => '']);
 
         $this->controller->store($request);
     }
@@ -68,11 +70,9 @@ class AbstractControllerTest extends TestCase
                 'description' => $this->faker->sentence,
             ]);
 
-        $model = $this->controller->store($request);
-        $this->assertEquals(
-            CategoryStub::find(1)->toArray(),
-            $model->toArray()
-        );
+        $resource = $this->controller->store($request);
+        $serialized = $resource->response()->getData(true);
+        $this->assertEquals(CategoryStub::first()->toArray(), $serialized['data']);
     }
 
     public function test_if_find_or_fail_fetch_model()
@@ -108,8 +108,9 @@ class AbstractControllerTest extends TestCase
             'description' => $this->faker->sentence,
         ]);
 
-        $result = $this->controller->show($category->id);
-        $this->assertEquals($result->toArray(), CategoryStub::find(1)->toArray());
+        $resource = $this->controller->show($category->id);
+        $serialized = $resource->response()->getData(true);
+        $this->assertEquals($category->toArray(), $serialized['data']);
     }
 
     public function test_update()
@@ -128,8 +129,10 @@ class AbstractControllerTest extends TestCase
                 'description' => $this->faker->sentence,
             ]);
 
-        $result = $this->controller->update($request, $category->id);
-        $this->assertEquals($result->toArray(), CategoryStub::find(1)->toArray());
+        $resource = $this->controller->update($request, $category->id);
+        $serialized = $resource->response()->getData(true);
+        $category->refresh();
+        $this->assertEquals($category->toArray(), $serialized['data']);
     }
 
     public function test_destroy()

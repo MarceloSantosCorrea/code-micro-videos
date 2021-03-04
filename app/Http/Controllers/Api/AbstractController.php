@@ -4,10 +4,13 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Http\Response;
 
 abstract class AbstractController extends Controller
 {
+    protected int $paginationSize = 15;
+
     protected abstract function model(): string;
 
     protected abstract function rulesStore(): array;
@@ -16,9 +19,20 @@ abstract class AbstractController extends Controller
 
     protected abstract function resource(): string;
 
+    protected abstract function resourceCollection(): string;
+
+    /**
+     * @return mixed
+     * @throws \ReflectionException
+     */
     public function index()
     {
-        return $this->model()::all();
+        $data = !$this->paginationSize ? $this->model()::all() : $this->model()::paginate($this->paginationSize);
+        $resourceCollectionClass = $this->resourceCollection();
+        $refClass = new \ReflectionClass($resourceCollectionClass);
+        return $refClass->isSubclassOf(ResourceCollection::class)
+            ? new $resourceCollectionClass($data)
+            : $resourceCollectionClass::collection($data);
     }
 
     public function store(Request $request)

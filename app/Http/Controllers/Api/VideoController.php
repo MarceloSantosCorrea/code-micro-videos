@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Resources\VideoResource;
 use App\Models\Video;
 use App\Rules\GenresHasCategoriesRule;
 use Illuminate\Http\Request;
@@ -53,8 +54,9 @@ class VideoController extends AbstractController
         $validatedData = $this->validate($request, $this->rulesStore());
         $model = $this->model()::create($validatedData);
         $model->refresh();
+        $resource = $this->resource();
 
-        return $model;
+        return new $resource($model);
     }
 
     public function update(Request $request, $id)
@@ -63,8 +65,9 @@ class VideoController extends AbstractController
         $this->addRuleIfGenreHasCategories($request);
         $validatedData = $this->validate($request, $this->rulesUpdate());
         $model->update($validatedData);
+        $resource = $this->resource();
 
-        return $model;
+        return new $resource($model);
     }
 
     protected function addRuleIfGenreHasCategories(Request $request)
@@ -72,5 +75,15 @@ class VideoController extends AbstractController
         $categoriesId = $request->get('categories_id');
         $categoriesId = is_array($categoriesId) ? $categoriesId : [];
         $this->rules['genres_id'][] = new GenresHasCategoriesRule($categoriesId);
+    }
+
+    protected function resourceCollection(): string
+    {
+        return $this->resource();
+    }
+
+    protected function resource(): string
+    {
+        return VideoResource::class;
     }
 }

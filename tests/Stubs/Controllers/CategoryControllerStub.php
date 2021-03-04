@@ -3,6 +3,7 @@
 namespace Tests\Stubs\Controllers;
 
 use App\Http\Controllers\Api\AbstractController;
+use App\Http\Resources\CategoryResource;
 use Tests\Stubs\Models\CategoryStub;
 
 class CategoryControllerStub extends AbstractController
@@ -28,5 +29,15 @@ class CategoryControllerStub extends AbstractController
             'description' => 'nullable',
             'is_active'   => 'boolean',
         ];
+    }
+
+    protected function resource(): string
+    {
+        return CategoryResource::class;
+    }
+
+    protected function resourceCollection(): string
+    {
+        return CategoryResource::class;
     }
 }

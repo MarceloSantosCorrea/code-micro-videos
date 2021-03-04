@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Resources\GenreResource;
 use App\Models\Genre;
 use Illuminate\Http\Request;
 
@@ -41,8 +42,9 @@ class GenreController extends AbstractController
             return $model;
         });
         $model->refresh();
+        $resource = $this->resource();
 
-        return $model;
+        return new $resource($model);
     }
 
     public function update(Request $request, $id)
@@ -52,19 +54,28 @@ class GenreController extends AbstractController
         $validatedData = $this->validate($request, $this->rulesUpdate());
 
         $self = $this;
-        $model = \DB::transaction(function () use ($request, $self, $model, $validatedData) {
-
+        \DB::transaction(function () use ($request, $self, $model, $validatedData) {
             $model->update($validatedData);
             $self->handleRelations($request, $model);
-
-            return $model;
         });
 
-        return $model;
+        $resource = $this->resource();
+
+        return new $resource($model);
     }
 
     protected function handleRelations(Request $request, Genre $genre)
     {
         $genre->categories()->sync($request->get('categories_id'));
+    }
+
+    protected function resourceCollection(): string
+    {
+        return $this->resource();
+    }
+
+    protected function resource(): string
+    {
+        return GenreResource::class;
     }
 }
