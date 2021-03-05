@@ -8,6 +8,8 @@ jobs:
         with:
           php-version: '7.4'
       - uses: actions/checkout@v2
+      - name: Acessar pasta backend
+        run: cd backend
       - name: Copy .env
         run: php -r "file_exists('.env') || copy('.env.example', '.env');"
       - name: Install Dependencies
