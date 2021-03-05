@@ -9,6 +9,7 @@ RUN apk add --no-cache openssl \
             libjpeg-turbo \
             libjpeg-turbo-dev \
             libpng-dev
+RUN touch /root/.bashrc | echo "PS1='\w\$ '" >> /root/.bashrc
 RUN docker-php-ext-install pdo pdo_mysql
 RUN docker-php-ext-configure gd --enable-gd --with-jpeg
 RUN docker-php-ext-install -j$(nproc) gd
