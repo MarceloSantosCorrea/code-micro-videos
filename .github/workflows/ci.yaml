@@ -26,6 +26,7 @@ jobs:
           chmod -R 777 storage bootstrap/cache
       - name: Create Database
         run: |
+          cd backend
           mkdir -p database
           touch database/database.sqlite
       - name: Execute tests (Unit and Feature tests) via PHPUnit
