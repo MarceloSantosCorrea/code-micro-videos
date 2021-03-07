@@ -8,8 +8,8 @@ function App() {
     <React.Fragment>
       <Navbar/>
       <Box paddingTop={'70px'}>
-        <Page title="Categorias">
-          Conteúdo
+        <Page title="Dashboard">
+          Dashboard
         </Page>
       </Box>
     </React.Fragment>
