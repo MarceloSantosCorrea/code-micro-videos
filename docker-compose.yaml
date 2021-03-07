@@ -4,6 +4,11 @@ services:
     build: .
     container_name: micro-videos-app
     entrypoint: dockerize -wait tcp://db:3306 -timeout 40s ./.docker/entrypoint.sh
+#    ports:
+#      - "3000:3000"
+#      - "35729:35729"
+#    environment:
+#      - CHOKIDAR_USEPOLLING=true
     volumes:
       - .:/var/www
     networks:
@@ -22,9 +27,6 @@ services:
       - .:/var/www
     networks:
       - app-network
-    depends_on:
-      - app
-
   db:
     build: ./.docker/mysql
     command: --innodb-use-native-aio=0
@@ -32,7 +34,7 @@ services:
     restart: always
     tty: true
     ports:
-      - "3306:3306"
+      - "33306:3306"
     volumes:
       - ./.docker/mysql/dbdata:/var/lib/mysql
       - ./.docker/mysql/sql:/docker-entrypoint-initdb.d
@@ -41,7 +43,6 @@ services:
       - MYSQL_USER=root
     networks:
       - app-network
-
   redis:
     image: redis:alpine
     container_name: micro-videos-redis
@@ -49,7 +50,6 @@ services:
       - 6379
     networks:
       - app-network
-
 networks:
   app-network:
     driver: bridge
