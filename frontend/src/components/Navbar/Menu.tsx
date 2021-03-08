@@ -7,6 +7,8 @@ import {Link} from "react-router-dom";
 const listRoutes = [
   'dashboard',
   'categories.list',
+  'categories.create',
+  'categories.edit',
 ]
 const menuRoutes = routes.filter(route => listRoutes.includes(route.name))
 
