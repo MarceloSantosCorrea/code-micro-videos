@@ -6,14 +6,12 @@ import AppRouter from "./routes/AppRouter";
 
 function App() {
   return (
-    <React.Fragment>
-      <BrowserRouter>
-        <Navbar/>
-        <Box paddingTop={'70px'}>
-          <AppRouter />
-        </Box>
-      </BrowserRouter>
-    </React.Fragment>
+    <BrowserRouter>
+      <Navbar/>
+      <Box paddingTop={'70px'}>
+        <AppRouter/>
+      </Box>
+    </BrowserRouter>
   )
 }
 
