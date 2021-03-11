@@ -8,7 +8,7 @@ import {Link as RouterLink} from 'react-router-dom'
 import {Location} from 'history'
 import routes from "../routes"
 import RouteParser from "route-parser"
-import {Container} from "@material-ui/core";
+import {Box, Container} from "@material-ui/core";
 
 const breadcrumbNameMap: { [key: string]: string } = {}
 routes.forEach(route => breadcrumbNameMap[route.path as string] = route.label)
@@ -42,8 +42,6 @@ export default function Breadcrumbs() {
     const pathnames = location.pathname.split('/').filter(x => x)
     pathnames.unshift('/')
 
-    console.log(pathnames)
-
     return (
       <MuiBreadcrumbs aria-label="breadcrumb">
         {pathnames.map((value, index) => {
@@ -73,7 +71,9 @@ export default function Breadcrumbs() {
 
   return (
     <Container>
-      <Route>{({location}: { location: Location }) => makeBreadcrumb(location)}</Route>
+      <Box paddingBottom={1}>
+        <Route>{({location}: { location: Location }) => makeBreadcrumb(location)}</Route>
+      </Box>
     </Container>
   )
 }
