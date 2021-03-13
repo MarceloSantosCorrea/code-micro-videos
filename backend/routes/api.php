@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
     Route::apiResources([
         'categories'   => Api\CategoryController::class,
         'genres'       => Api\GenreController::class,
-        'cast_members' => Api\CastMemberController::class,
+        'cast-members' => Api\CastMemberController::class,
         'videos'       => Api\VideoController::class,
     ]);
 });
