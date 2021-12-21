@@ -36,7 +36,7 @@ class CastMemberControllerTest extends TestCase
 
     public function test_index(): void
     {
-        $response = $this->get(route('api.cast_members.index'));
+        $response = $this->get(route('api.cast-members.index'));
 
         $response
             ->assertStatus(200)
@@ -59,7 +59,7 @@ class CastMemberControllerTest extends TestCase
 
     public function test_show(): void
     {
-        $response = $this->get(route('api.cast_members.show', ['cast_member' => $this->castMember->id]));
+        $response = $this->get(route('api.cast-members.show', ['cast_member' => $this->castMember->id]));
 
         $response
             ->assertStatus(200)
@@ -116,7 +116,7 @@ class CastMemberControllerTest extends TestCase
 
     public function test_destroy(): void
     {
-        $response = $this->json('delete', route('api.cast_members.destroy', ['cast_member' => $this->castMember->id]));
+        $response = $this->json('delete', route('api.cast-members.destroy', ['cast_member' => $this->castMember->id]));
         $response->assertStatus(204);
 
         $this->assertNull(CastMember::find($this->castMember->id));
@@ -130,11 +130,11 @@ class CastMemberControllerTest extends TestCase
 
     protected function routeStore(): string
     {
-        return route('api.cast_members.store');
+        return route('api.cast-members.store');
     }
 
     protected function routeUpdate(): string
     {
-        return route('api.cast_members.update', ['cast_member' => $this->castMember->id]);
+        return route('api.cast-members.update', ['cast_member' => $this->castMember->id]);
     }
 }
